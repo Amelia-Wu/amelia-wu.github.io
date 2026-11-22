@@ -1,0 +1,44 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+import { resume } from '../data/resume';
+---
+<Base title="Resume">
+  <h1>Resume 📄</h1>
+  <p class="lead">{resume.summary}</p>
+  <p class="no-print muted">
+    {site.email && <><a href={`mailto:${site.email}`}>{site.email}</a> · </>}
+    Print this page (Ctrl/Cmd + P) to save it as a PDF.
+  </p>
+
+  <h2>Experience</h2>
+  {resume.experience.map((j) => (
+    <div class="job">
+      <div class="job-head"><strong>{j.role} · {j.company}</strong><span class="muted">{j.period}</span></div>
+      <div class="where">{j.location}</div>
+      <ul>{j.points.map((pt) => <li>{pt}</li>)}</ul>
+    </div>
+  ))}
+
+  <h2>Education</h2>
+  {resume.education.map((e) => (
+    <div class="job">
+      <div class="job-head"><strong>{e.degree}</strong><span class="muted">{e.period}</span></div>
+      <div class="where">{e.school}</div>
+      {e.note && <div class="muted">{e.note}</div>}
+    </div>
+  ))}
+
+  <h2>Certifications</h2>
+  {resume.certifications.map((c) => (
+    <div class="job-head"><strong>{c.name}</strong><span class="muted">{c.issuer}, {c.year}</span></div>
+  ))}
+
+  <h2>Skills</h2>
+  {resume.skillGroups.map((g) => (
+    <div class="job">
+      <strong>{g.label}</strong>
+      <ul class="tags">{g.items.map((s) => <li>{s}</li>)}</ul>
+    </div>
+  ))}
+</Base>

@@ -1,0 +1,40 @@
+---
+import Base from '../layouts/Base.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { site } from '../data/site';
+import { projects } from '../data/projects';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+const fmt = (d: Date) => d.toLocaleDateString('en-AU', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+<Base>
+  <section class="hero">
+    <img class="avatar" src="/avatar.svg" alt="" />
+    <div>
+      <h1>Hi, I'm {site.shortName} <span class="wave">👋</span></h1>
+      <p class="lead" style="margin:0">{site.role}. {site.tagline}</p>
+    </div>
+  </section>
+  <ul class="pills">
+    <li><a href="/resume/">📄 Resume</a></li>
+    {site.email && <li><a href={`mailto:${site.email}`}>💌 Email</a></li>}
+    {site.links.map((l) => (<li><a href={l.href}>✨ {l.label}</a></li>))}
+  </ul>
+
+  <h2>Recent writing</h2>
+  <ul class="post-list">
+    {posts.map((p) => (
+      <li><a href={`/blog/${p.id}/`}>{p.data.title}</a><time datetime={p.data.date.toISOString()}>{fmt(p.data.date)}</time></li>
+    ))}
+  </ul>
+  <p><a href="/blog/">All posts →</a></p>
+
+  <h2>Selected projects</h2>
+  <div class="grid">
+    {projects.slice(0, 2).map((p) => <ProjectCard p={p} />)}
+  </div>
+  <p><a href="/projects/">All projects →</a></p>
+</Base>

@@ -1,0 +1,10 @@
+---
+interface Props { p: { emoji: string; name: string; description: string; tags: string[]; link: string; demo: string } }
+const { p } = Astro.props;
+---
+<div class="card">
+  <h3><span class="emoji" aria-hidden="true">{p.emoji}</span>{p.link ? <a href={p.link}>{p.name}</a> : p.name}</h3>
+  <p class="muted">{p.description}</p>
+  <ul class="tags">{p.tags.map((t) => <li>{t}</li>)}</ul>
+  {p.demo && <p style="margin-top:.6rem"><a href={p.demo}>Live demo ↗</a></p>}
+</div>
